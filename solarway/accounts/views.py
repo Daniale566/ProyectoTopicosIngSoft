@@ -198,3 +198,23 @@ def download_order_pdf(request, order_id):
     response = HttpResponse(pdf_buffer, content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="order_{order.id}.pdf"'
     return response
+
+
+@login_required
+def send_order_pdf_email(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    weather_data = get_weather()
+    weather_description = weather_data['weather'][0]['description']
+    
+    if 'rain' in weather_description:
+        estimated_delivery = '3-4 días'
+    elif 'clear' in weather_description:
+        estimated_delivery = '1-2 días'
+    else:
+        estimated_delivery = '2-3 días'
+
+    pdf_generator = PDFGenerator()
+    pdf_generator.send_order_pdf_email(order, estimated_delivery)
+
+    messages.success(request, 'El PDF del pedido ha sido enviado a tu correo electrónico.')
+    return redirect('profile')

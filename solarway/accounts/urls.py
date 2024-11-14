@@ -18,5 +18,6 @@ urlpatterns = [
     path('order_summary/', views.order_summary, name='order_summary'),
     path('profile/', views.profile, name='profile'),
     path('download_order_pdf/<int:order_id>/', views.download_order_pdf, name='download_order_pdf'),
+    path('send_order_pdf_email/<int:order_id>/', views.send_order_pdf_email, name='send_order_pdf_email'),
     path('', home, name='home'),
 ]

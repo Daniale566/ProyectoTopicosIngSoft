@@ -21,7 +21,7 @@
             <th>Precio Total</th>
             <th>Estado</th>
             <th>Gafas Compradas</th>
-            <th>Factura</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -42,6 +42,8 @@
             </td>
             <td>
                 <a href="{% url 'download_order_pdf' order.id %}" class="btn btn-primary">Descargar PDF</a>
+                <p>&nbsp;</p>
+                <a href="{% url 'send_order_pdf_email' order.id %}" class="btn btn-secondary">Enviar Correo</a>
             </td>
         </tr>
         {% endfor %}

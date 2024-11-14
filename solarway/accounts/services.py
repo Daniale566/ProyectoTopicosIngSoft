@@ -6,6 +6,8 @@ from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
 from django.conf import settings
 from io import BytesIO
 from datetime import datetime
+from django.core.mail import EmailMessage
+from django.shortcuts import get_object_or_404
 
 class PDFGenerator:
     def generate_order_pdf(self, order, estimated_delivery):
@@ -15,7 +17,7 @@ class PDFGenerator:
         styles = getSampleStyleSheet()
 
         # Título
-        title = Paragraph("factura del Pedido", styles['Title'])
+        title = Paragraph("Resumen del Pedido", styles['Title'])
         elements.append(title)
 
         # Información del pedido
@@ -96,3 +98,14 @@ class PDFGenerator:
         doc.build(elements)
         buffer.seek(0)
         return buffer
+
+    def send_order_pdf_email(self, order, estimated_delivery):
+        pdf_buffer = self.generate_order_pdf(order, estimated_delivery)
+        email = EmailMessage(
+            'Resumen del Pedido',
+            'Adjunto encontrarás el resumen de tu pedido.',
+            settings.EMAIL_HOST_USER,
+            [order.user.email],
+        )
+        email.attach(f'order_{order.id}.pdf', pdf_buffer.getvalue(), 'application/pdf')
+        email.send()
