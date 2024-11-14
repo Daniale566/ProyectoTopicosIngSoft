@@ -9,6 +9,8 @@ from django.contrib import messages
 from django.db.models import Q
 from django.contrib.auth.models import User
 from .models import Order
+from .forms import RegisterForm
+
 
 
 
