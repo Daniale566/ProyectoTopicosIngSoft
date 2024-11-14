@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block title %}Gafas Disponibles{% endblock %}
+{% block content %}
+<h2>Gafas Disponibles</h2>
+<div class="row mb-3">
+    <div class="col-md-12 text-right">
+        <button class="btn btn-info" data-toggle="collapse" data-target="#filterForm" aria-expanded="false" aria-controls="filterForm">Filtrar Gafas</button>
+    </div>
+</div>
+<div class="collapse" id="filterForm">
+    <div class="card card-body mb-3">
+        <form method="get">
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label for="min_price">Precio Mínimo</label>
+                    <input type="number" class="form-control" id="min_price" name="min_price" placeholder="0">
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="max_price">Precio Máximo</label>
+                    <input type="number" class="form-control" id="max_price" name="max_price" placeholder="1000">
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="min_stock">Stock Mínimo</label>
+                    <input type="number" class="form-control" id="min_stock" name="min_stock" placeholder="0">
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="max_stock">Stock Máximo</label>
+                    <input type="number" class="form-control" id="max_stock" name="max_stock" placeholder="100">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="order_by">Ordenar Por</label>
+                    <select class="form-control" id="order_by" name="order_by">
+                        <option value="">Seleccionar</option>
+                        <option value="precio">Precio (Menor a Mayor)</option>
+                        <option value="-precio">Precio (Mayor a Menor)</option>
+                        <option value="id">Más Nuevo</option>
+                        <option value="-id">Más Antiguo</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Aplicar Filtros</button>
+        </form>
+    </div>
+</div>
+<div class="row">
+    {% for gafa in gafas %}
+    <div class="col-md-4">
+        <div class="card mb-4 shadow-sm">
+            <img src="{{ gafa.imagen.url }}" class="card-img-top" alt="{{ gafa.nombre }}">
+            <div class="card-body">
+                <h5 class="card-title">{{ gafa.nombre }}</h5>
+                <p class="card-text">{{ gafa.descripcion }}</p>
+                <p class="card-text"><strong>Precio:</strong> ${{ gafa.precio }}</p>
+                <p class="card-text"><strong>Stock:</strong> {{ gafa.stock }}</p>
+                <div class="d-flex justify-content-between">
+                    <form method="post" action="{% url 'add_to_wishlist' gafa.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-secondary">Añadir a la Wishlist</button>
+                    </form>
+                    <form method="post" action="{% url 'add_to_cart' gafa.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary">Añadir al Carrito</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

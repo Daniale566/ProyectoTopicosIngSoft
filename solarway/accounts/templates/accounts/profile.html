@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Perfil{% endblock %}
+{% block content %}
+<h2>Perfil de Usuario</h2>
+<div class="card mb-4">
+    <div class="card-body">
+        <h5 class="card-title">Información del Usuario</h5>
+        <p><strong>Nombre de Usuario:</strong> {{ user.username }}</p>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+    </div>
+</div>
+
+<h3>Pedidos Creados</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Fecha</th>
+            <th>Dirección</th>
+            <th>Método de Pago</th>
+            <th>Precio Total</th>
+            <th>Estado</th>
+            <th>Gafas Compradas</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.created_at }}</td>
+            <td>{{ order.address }}</td>
+            <td>{{ order.payment_method }}</td>
+            <td>${{ order.total_price }}</td>
+            <td>{{ order.get_status_display }}</td>
+            <td>
+                <ul>
+                    {% for gafa in order.gafas.all %}
+                    <li>{{ gafa.nombre }} - ${{ gafa.precio }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+    <h1 class="display-4">Bienvenido a Solarway</h1>
+    <p class="lead">Tu tienda de gafas solares de confianza.</p>
+    <hr class="my-4">
+    <p>Explora nuestra colección de gafas solares y encuentra el par perfecto para ti.</p>
+    <a class="btn btn-primary btn-lg" href="{% url 'register' %}" role="button">Regístrate</a>
+</div>
+{% endblock %}

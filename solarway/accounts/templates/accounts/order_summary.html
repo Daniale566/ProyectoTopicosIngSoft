@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Resumen del Pedido{% endblock %}
+{% block content %}
+<h2>Resumen del Pedido</h2>
+<p><strong>Order ID:</strong> {{ order.id }}</p>
+<p><strong>Método de Pago:</strong> {{ order.payment_method }}</p>
+<p><strong>Dirección:</strong> {{ order.address }}</p>
+<h3>Gafas Compradas</h3>
+<ul>
+    {% for gafa in order.gafas.all() %}
+    <li>{{ gafa.nombre }} - ${{ gafa.precio }}</li>
+    {% endfor %}
+</ul>
+<p><strong>Precio Total:</strong> ${{ order.total_price }}</p>
+{% endblock %}
