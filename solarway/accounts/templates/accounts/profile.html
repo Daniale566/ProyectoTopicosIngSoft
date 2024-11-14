@@ -21,6 +21,7 @@
             <th>Precio Total</th>
             <th>Estado</th>
             <th>Gafas Compradas</th>
+            <th>Factura</th>
         </tr>
     </thead>
     <tbody>
@@ -38,6 +39,9 @@
                     <li>{{ gafa.nombre }} - ${{ gafa.precio }}</li>
                     {% endfor %}
                 </ul>
+            </td>
+            <td>
+                <a href="{% url 'download_order_pdf' order.id %}" class="btn btn-primary">Descargar PDF</a>
             </td>
         </tr>
         {% endfor %}

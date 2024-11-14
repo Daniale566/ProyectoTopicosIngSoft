@@ -17,5 +17,6 @@ urlpatterns = [
     path('checkout/', views.checkout, name='checkout'),
     path('order_summary/', views.order_summary, name='order_summary'),
     path('profile/', views.profile, name='profile'),
+    path('download_order_pdf/<int:order_id>/', views.download_order_pdf, name='download_order_pdf'),
     path('', home, name='home'),
 ]

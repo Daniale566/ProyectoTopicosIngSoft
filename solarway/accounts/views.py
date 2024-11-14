@@ -12,6 +12,8 @@ from .models import Order
 from .forms import RegisterForm
 from django.conf import settings
 import requests
+from .services import PDFGenerator
+
 
 
 
@@ -175,3 +177,24 @@ def get_weather():
     response = requests.get(url)
     weather_data = response.json()
     return weather_data
+
+
+@login_required
+def download_order_pdf(request, order_id):
+    order = get_object_or_404(Order, id=order_id, user=request.user)
+    weather_data = get_weather()
+    weather_description = weather_data['weather'][0]['description']
+    
+    if 'rain' in weather_description:
+        estimated_delivery = '3-4 días'
+    elif 'clear' in weather_description:
+        estimated_delivery = '1-2 días'
+    else:
+        estimated_delivery = '2-3 días'
+
+    pdf_generator = PDFGenerator()
+    pdf_buffer = pdf_generator.generate_order_pdf(order, estimated_delivery)
+
+    response = HttpResponse(pdf_buffer, content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="order_{order.id}.pdf"'
+    return response
