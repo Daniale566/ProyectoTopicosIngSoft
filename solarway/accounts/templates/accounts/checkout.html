@@ -5,6 +5,8 @@
 <div class="card mb-4">
     <div class="card-body">
         <p><strong>Precio Total:</strong> ${{ total_price }}</p>
+        <p><strong>Tiempo estimado de entrega:</strong> {{ estimated_delivery }}</p>
+        <p><strong>Ubicacion para entrega:</strong> Medellín</p>
         <form method="post">
             {% csrf_token %}
             <div class="form-group">

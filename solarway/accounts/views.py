@@ -10,6 +10,8 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 from .models import Order
 from .forms import RegisterForm
+from django.conf import settings
+import requests
 
 
 
@@ -100,6 +102,16 @@ def logout_view(request):
 def checkout(request):
     cart = get_object_or_404(Cart, user=request.user)
     total_price = cart.total_price()
+    weather_data = get_weather()
+    weather_description = weather_data['weather'][0]['description']
+    
+    if 'rain' in weather_description:
+        estimated_delivery = '3-4 días'
+    elif 'clear' in weather_description:
+        estimated_delivery = '1-2 días'
+    else:
+        estimated_delivery = '2-3 días'
+
     if request.method == 'POST':
         address = request.POST['address']
         payment_method = request.POST['payment_method']
@@ -107,7 +119,12 @@ def checkout(request):
         order.gafas.set(cart.gafas.all())
         cart.gafas.clear()
         return redirect('profile')
-    return render(request, 'accounts/checkout.html', {'cart': cart, 'total_price': total_price})
+    
+    return render(request, 'accounts/checkout.html', {
+        'cart': cart,
+        'total_price': total_price,
+        'estimated_delivery': estimated_delivery
+    })
 
 
 @login_required
@@ -146,3 +163,15 @@ def gafas_list(request):
         gafas = gafas.order_by(order_by)
 
     return render(request, 'accounts/gafas_list.html', {'gafas': gafas})
+
+
+
+#API WEATHER
+
+def get_weather():
+    api_key = settings.OPENWEATHERMAP_API_KEY
+    city = 'Medellin'
+    url = f'https://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}'
+    response = requests.get(url)
+    weather_data = response.json()
+    return weather_data
