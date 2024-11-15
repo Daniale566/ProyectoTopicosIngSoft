@@ -11,12 +11,14 @@ from django.contrib.auth.models import User
 from .models import Order
 from .forms import RegisterForm
 from django.conf import settings
-import requests
 from .services import PDFGenerator
 
+from .serializer import TaskSerializer
+from rest_framework import viewsets
 
-
-
+class ApiproductsView(viewsets.ModelViewSet):
+    serializer_class = TaskSerializer
+    queryset = Gafas.objects.all()
 
 def register(request):
     if request.method == 'POST':

@@ -1,6 +1,11 @@
 from django.urls import path
+from django.conf.urls import include
 from . import views
 from .views import home, gafas_list, wishlist, cart
+from rest_framework import routers
+
+router=routers.DefaultRouter()
+router.register(r'products',views.ApiproductsView,'products')
 
 
 urlpatterns = [
@@ -20,4 +25,5 @@ urlpatterns = [
     path('download_order_pdf/<int:order_id>/', views.download_order_pdf, name='download_order_pdf'),
     path('send_order_pdf_email/<int:order_id>/', views.send_order_pdf_email, name='send_order_pdf_email'),
     path('', home, name='home'),
+    path('api/v1',include(router.urls)),
 ]
